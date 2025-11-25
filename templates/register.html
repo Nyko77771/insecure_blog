@@ -1,7 +1,64 @@
 {% extends "./partials/head.html" %}
-
+{% block title %}Registration {% endblock %}
 {% block content%}
-    <div class="middleBox">
-        <h2>Create New Account</h2>
+    <div class="contentBox">
+        <div class="middleBox">
+            <h2>Create New Account</h2>
+
+            <form method="POST" action="{{ url_for('register') }}" id="registerForm">
+                <div class="formBox">
+                    <label for="username">
+                        Username
+                        <button type="button" class="btnInfo" onclick="toggleHelp('usernameHelp')">&#8505;</button>
+                    </label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Choose a username"
+                        pattern="[a-zA-Z0-9_]+"
+                        title="Only letters, numbers, and underscores allowed"
+                        required>
+                    <div class="usernameHelp helpBox hidden">Only letters, numbers, and underscores</div>
+                </div>
+                <div class="formBox">
+                    <label for="email">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="your.email@example.com"
+                        required>
+                </div>
+                <div class="formBox">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        minlength="16"
+                        required>
+                    <div class="passwordHelp helpBox hidden">Must be at least 16 characters long</div>
+                </div>
+                <div class="formBox">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        placeholder="Re-enter your password"
+                        minlength="16"
+                        required>
+                    <span class="confirmHelp helpBox hidden">Enter the same password to confirm</span>
+                </div>
+                <button type="submit" class="btnSubmit">Register</button>
+            </form>
+            <br>
+            <p class="linkText">
+                Already have an account? <a href="{{ url_for('index') }}">Login here</a>
+            </p>
+        </div>
     </div>
+
 {% endblock %}

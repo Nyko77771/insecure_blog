@@ -1,18 +1,33 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, session
+import os
+from dotenv import load_dotenv
+# Importing my models:
+from models.user import User
+
 
 # Creating flask instance
 app = Flask(__name__)
-ren = render_template
+render = render_template
+# VULNERABILITY: Hard Coded Secret Key
+app.secret_key = "BAD_SECRET"
+app.config["DEBUG"] = True
 
-# Creating a route decorator for home
-@app.route('/')
+# ROUTES
+
+# Creating a route decorator for home, which is a login section
+@app.route('/', methods=["GET"," POST"])
 def index():
-    return ren('login.html')
+    if request.method == "POST":
+        username = request.form.get('username')
+        password = request.form.get('password')
+    return render('login.html')
 
-@app.route('/new')
+# Creating a route decorator for registration
+@app.route('/new', methods=["GET","POST"])
 def register():
-    return ren('register.html')
+    return render('register.html')
 
+# VULNERABILITY: User name is reflected in the URL
 @app.route('/user/<name>')
 def userPage(name):
     return "<h1>Hello {}</h1>".format(name)
