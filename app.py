@@ -9,6 +9,10 @@ ren = render_template
 def index():
     return ren('login.html')
 
+@app.route('/new')
+def register():
+    return ren('register.html')
+
 @app.route('/user/<name>')
 def userPage(name):
     return "<h1>Hello {}</h1>".format(name)
