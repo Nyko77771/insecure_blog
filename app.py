@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect, flash
 import os
 from dotenv import load_dotenv
 # Importing my models:
@@ -15,11 +15,23 @@ app.config["DEBUG"] = True
 # ROUTES
 
 # Creating a route decorator for home, which is a login section
-@app.route('/', methods=["GET"," POST"])
+@app.route('/', methods=["GET","POST"])
 def index():
     if request.method == "POST":
         username = request.form.get('username')
         password = request.form.get('password')
+
+        user = User.authenticate(username, password)
+
+        if user:
+            session['user_id'] = user['id']
+            session['username'] = user['username']
+            session['role'] = user['role']
+            flash("Successfully Logged-In")
+            return redirect('home.html')
+        else:
+            flash("Username does not exist")
+            redirect('login.html')
     return render('login.html')
 
 # Creating a route decorator for registration

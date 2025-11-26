@@ -21,7 +21,7 @@ class DatabaseConnection:
 
     def _init_connection(self):
         try:
-            dotenv_path = join(dirnam(__file__), '.env')
+            dotenv_path = join(dirname(__file__), '.env')
             load_dotenv(dotenv_path)
             DATABASE_PASSWORD = os.environ.get("MYSQL_PASSWORD")
 

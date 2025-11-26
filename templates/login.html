@@ -6,6 +6,15 @@
                 <h2>Login to Your Account</h2>
                 <p>Enter your details to access your blogs</p>
 
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+                <p class="flashNotice">{{ message }}</p>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+
             <form method="POST" action="{{ url_for('index') }}">
                 <div class="formBox">
                     <label for="username">Username</label>
