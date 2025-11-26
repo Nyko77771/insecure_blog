@@ -1,10 +1,12 @@
 from models.database import DatabaseConnection
 
+# VULNERABILITY: Missinng hashing method
 class User:
     """
     User model
     """
 
+    # VULNERABILITY: Password not hashed
     def __init__(self, username, email, password, role='regular', user_id = None):
         print("Initializing User")
         self.id = user_id
@@ -13,6 +15,7 @@ class User:
         self.password = password
         self.role = role
 
+    # VULNERABILITY: Password saved as plain text
     def db_save(self):
         db = DatabaseConnection()
         if self.id:
@@ -80,6 +83,7 @@ class User:
             return result
         return None
 
+    # VULNERABILITY: Plain password comparison
     def authenticate(username, password):
         try:
             user = User.get_user_by_username(username)

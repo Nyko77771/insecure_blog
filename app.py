@@ -37,9 +37,34 @@ def index():
 # Creating a route decorator for registration
 @app.route('/new', methods=["GET","POST"])
 def register():
+    if request.method == "POST":
+        username = request.form.get("username")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirm_password")
+
+        if password == confirmation:
+            user = User.db_save()
+
     return render('register.html')
 
+# TO-DO!!!
+# VULNERABILITY: User input is reflected back without any checks or validation
+# Reflected XSS
+@app.route('/home')
+def home():
+    return None
+
+# TO-DO!!!
+# VULNERABILITY: XSS is stored on the database and can be retrieved
+# Stored XSS
+@app.route('/create')
+def create_blog():
+    return None
+
+# TO-DO!!!
 # VULNERABILITY: User name is reflected in the URL
+# DOM based XSS
 @app.route('/user/<name>')
 def userPage(name):
     return "<h1>Hello {}</h1>".format(name)

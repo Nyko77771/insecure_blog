@@ -21,14 +21,17 @@ class DatabaseConnection:
 
     def _init_connection(self):
         try:
+            """
             dotenv_path = join(dirname(__file__), '.env')
             load_dotenv(dotenv_path)
             DATABASE_PASSWORD = os.environ.get("MYSQL_PASSWORD")
+            """
 
             self._connection = mysql.connect(
                 host = "localhost",
                 user = "root",
-                password = DATABASE_PASSWORD,
+                # VULNERABILITY: Sensitive Data Exposure.
+                password = "VeryLongANDB0r1nGAns1",
                 database = "blog_app"
             )
             print("MySQL connection established")
@@ -99,6 +102,7 @@ class DatabaseConnection:
             print("Update successful")
             return result
         except Exception as e:
+            # VULNERABILITY: Detailed error message.
             print(f"Update error. Error: {e}")
 
     def close(self):
