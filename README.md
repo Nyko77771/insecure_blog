@@ -1,6 +1,6 @@
 ![Extension Logo Screenshot](/static/images/Logo.png)
 
-# :hook: insecure_blog
+# insecure_blog
 
 ## By Nyk077771
 
