@@ -1,0 +1,78 @@
+<!--
+    Link to Head.html
+-->
+
+{% extends "./partials/head.html" %}
+
+<!--
+   Flask Block
+-->
+
+{% block content %}
+<!--
+   Title Section
+-->
+<div class="homeBox">
+    <div class="titleBox">
+        <h2>Create New Blog</h2>
+        <p class="anouncement">INSECURE Version: XSS Vulnerability (Stored)</p>
+    </div>
+</div>
+
+<!--
+   Flask Message
+-->
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p class="flashNotice">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<!--
+   Blog Creation Div
+-->
+
+<div class="contentBox">
+    <div class="createForm">
+        <form action="{{url_for('create_blog')}}" method="POST">
+<!--
+   Title Creation
+-->
+            <div>
+                <label for="">Make Blog Title:</label>
+                <input type="text"
+                id="createInput"
+                name="title"
+                placeholder="Create a title for Blog"
+                maxlength="100"
+                required>
+            </div>
+<!--
+   Content Creation
+-->
+            <div>
+                <label for="content">Create Your Blog:</label>
+                <br>
+                <textarea type="text"
+                id="createText"
+                name="content"
+                placeholder="Write your blog contents"
+                rows="16"
+                cols="50"
+                required></textarea>
+            </div>
+            <div class="createBtn">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+                    Create
+                </button>
+                <a href="{{url_for('home')}}" id="clearBtn">Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

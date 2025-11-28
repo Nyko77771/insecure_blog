@@ -1,0 +1,31 @@
+{% extends "./partials/head.html" %}
+{% block content %}
+
+
+    <div class="titleBox">
+        <h1 class="completedTitle">
+            BLOG.TITLE |SAFE
+        </h1>
+    </div>
+
+    <div class="completedInfo">
+        <span class="completedUser">
+            BLOG.USERNAME |SAFE
+        </span>
+        <span class="completedCreated">
+            BLOG.CREATED_AT
+        </span>
+    </div>
+
+    <div class="contentBox">
+        <div class="completedBody">
+            BLOG.CONTENT|SAFE
+        </div>
+        <div class="completedButtons">
+            <a href="{{ url_for('home')}}" class="clearBtn">Return Home</a>
+            {% if session.user_id == blog.user_id or session.role == 'admin' %}
+            <button type="button" class="deleteBtn" >Delete</button>
+        </div>
+    </div>
+
+{% endblock %}

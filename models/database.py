@@ -75,10 +75,10 @@ class DatabaseConnection:
                 cursor.execute(query)
 
             self._connection.commit()
-            last_id = cursor.lastrowid
+            result = cursor.fetchall(size=1)
             cursor.close()
-            print(f"Successfully inserted {last_id}")
-            return last_id
+            print(f"Successfully inserted {result['user']}")
+            return result
         except Exception as e:
             # VULNERABILITY: Detailed error message.
             print(f"Insert query error: {e}")

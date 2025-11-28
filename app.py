@@ -53,14 +53,22 @@ def register():
 # Reflected XSS
 @app.route('/home')
 def home():
-    return None
+    session['username'] = 'Sophia'
+    return render('home.html', user_search=None)
 
 # TO-DO!!!
 # VULNERABILITY: XSS is stored on the database and can be retrieved
 # Stored XSS
 @app.route('/create')
 def create_blog():
-    return None
+    return render('create.html')
+
+# To-Complete
+@app.route('/blog')
+def blog_page():
+    return render('blog.html')
+
+
 
 # TO-DO!!!
 # VULNERABILITY: User name is reflected in the URL

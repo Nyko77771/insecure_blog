@@ -31,7 +31,10 @@
                         required>
                 </div>
                 <div class="formBox">
-                    <label for="password">Password</label>
+                    <label for="password">
+                        Password
+                        <button type="button" class="btnInfo" onclick="toggleHelp('passwordHelp')">&#8505;</button>
+                    </label>
                     <input
                         type="password"
                         id="password"
@@ -42,7 +45,10 @@
                     <div class="passwordHelp helpBox hidden">Must be at least 16 characters long</div>
                 </div>
                 <div class="formBox">
-                    <label for="confirm_password">Confirm Password</label>
+                    <label for="confirm_password">
+                        Confirm Password
+                        <button type="button" class="btnInfo" onclick="toggleHelp('confirmHelp')">&#8505;</button>
+                    </label>
                     <input
                         type="password"
                         id="confirm_password"

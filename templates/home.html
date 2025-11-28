@@ -1,7 +1,127 @@
-                {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                {% for message in messages %}
+<!--
+    Link to Head.html
+-->
+
+{% extends "./partials/head.html" %}
+
+<!--
+   Flask Block
+-->
+
+{% block content %}
+<!--
+    Title Div
+-->
+<div class="homeBox">
+    <div class="titleBox">
+            <h2>Welcome, {{ session.username}}!</h2>
+            <p class="anouncement">INSECURE Version: XSS Vulnerability (Reflected)</p>
+    </div>
+
+<!--
+    Log-in Message
+-->
+    <div class="homeMsg">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
                 <p class="flashNotice">{{ message }}</p>
-                {% endfor %}
-                {% endif %}
-                {% endwith %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    </div>
+
+<!--
+    Search Div (Bootstrap)
+-->
+
+    <div class="contentBox">
+        <div class="searchBox">
+            <form method="GET" action="{{ url_for('home')}}" class="form-inline">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                <div id="homeBtns">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+
+                    {% if user_search %}
+                        <a href="{{url_for('home')}}" id="clearBtn">Clear</a>
+                    {% endif %}
+                </div>
+            </form>
+
+<!--
+    Search Results Div
+-->
+
+        <div class="blogsBox">
+            <div class="blogsTitle">
+                <h4>
+                    {% if user_search %}
+                    Found Blogs:
+                    {% endif %}
+                </h4>
+            </div>
+            {% if search_blogs %}
+            {% for blog in search_blogs %}
+                <div class="blogBox">
+                    <div class="blogTitle">
+                        <!--
+                            VULNERABILITY: Reflected XSS
+                        -->
+                        <h5>
+                            <a href="{{url_for(create_blog)}}">{{ blog.name|safe }}</a>
+                        </h5>
+                    </div>
+                    <div class="blogFacts">
+                        <span>{{ blog.username }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+<!--
+    Custom Break Line Div
+-->
+            <div class="blogDivider"></div>
+
+<!--
+    Users Blogs List
+-->
+
+        <div class="blogsBox">
+            <div class="blogsTitle">
+                <h4>
+                    User Blogs:
+                </h4>
+            </div>
+            {% if blogs %}
+            {% for blog in blogs %}
+            <div class="blogBox">
+                <div class="blogTitle">
+                    <h5>
+                        <a href="">
+                            {{ blog.name|safe }}
+                        </a>
+                    </h5>
+                </div>
+                <div class="blogFacts">
+                    <span>{{ blog.username }}</span>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="blogBox">
+                <div class="blogTitle">
+                    <h5>
+                        User has no blogs.
+                    </h5>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+

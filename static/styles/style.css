@@ -1,3 +1,6 @@
+/*
+    Login and Register CSS
+*/
 html {
     height: 100%;
 }
@@ -104,3 +107,122 @@ html {
     display: none;
 }
 
+/*
+    Home CSS
+*/
+.homeBox {
+}
+
+.titleBox {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.homeMsg {
+    text-align: center;
+    color: red;
+    font-weight: 600;
+}
+
+.contentBox {
+    max-height: 480px;
+}
+
+.searchBox {
+    min-width: 450px;
+    min-height: 400px;
+}
+
+.searchBox form{
+    border: 4px double black;
+    border-radius: 2%;
+    padding: 4px;
+}
+
+.searchBox input{
+    padding: 10px;
+    border: 2px dashed red;
+}
+
+#homeBtns {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.blogsBox {
+    text-align: center;
+    margin-top: 5px;
+}
+
+.blogBox {
+    border: 1px dashed green;
+    margin-top: 2px;
+}
+
+.blogBox .blogTitle {
+    margin-top: 2px;
+    font-style: italic;
+    font-weight: 100;
+}
+
+.blogDivider {
+    border: 1px solid black;
+    margin-top: 2px;
+    margin-bottom: 20px;
+}
+
+.flashNotice {
+
+}
+
+#clearBtn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid green;
+    text-decoration: none;
+    margin-left: 5px;
+    min-width: 100px;
+    text-align: center;
+    border-radius: 7%;
+    color: green;
+}
+
+#clearBtn:hover {
+    color: white;
+    background-color: green;
+}
+
+/*
+    Create CSS
+*/
+
+#createInput {
+
+}
+#createText {
+    padding: 5px;
+}
+
+.anouncement {
+    color: red;
+    text-decoration: underline;
+    margin-bottom: 5px;
+    font-size: small;
+}
+
+.createBtn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+/*
+    Blog CSS
+*/
+
+.blogInfo {
+    text-align: center;
+}
