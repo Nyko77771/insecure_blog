@@ -44,6 +44,7 @@ class User:
             print("User found by id")
             return results[0]
         else:
+            # VULNERABILITY: Too much information provided.
             print(f"User by {user_id} not found")
             return None
 
@@ -64,10 +65,23 @@ class User:
         db = DatabaseConnection()
         results = db.execute_select_query(query,(username,))
         if results:
-            print("User found by username")
+            # VULNERABILITY: Too much information provided.
+            print(f"User found by username. User {results}")
             return results[0]
         else:
             print(f"User by {username} not found")
+            return None
+
+    def get_user_by_email(email):
+        query = "SELECT * FROM users WHERE email = %s"
+        db = DatabaseConnection()
+        results = db.execute_select_query(query,(email,))
+        if results:
+            print("User found by email")
+            return results[0]
+        else:
+            # VULNERABILITY: Too much information provided.
+            print(f"User by {email} not found")
             return None
 
     def delete_user(self):
@@ -78,6 +92,7 @@ class User:
         query = "DELETE FROM users WHERE id = %s"
         result = db.execute_update_query(query, (self.id))
         if result:
+            # VULNERABILITY: Too much information provided.
             print(f"User {self.username} has been removed")
             print(f"Result returned: {result}")
             return result
@@ -88,10 +103,11 @@ class User:
         try:
             user = User.get_user_by_username(username)
             print(f"returned user: {user}")
-            user_password = user['password']
-            if user and user_password == password:
+            user_password = User.get_user_password(username)
+            print(f"Comparing {password} and {user_password}")
+            if user and user_password[0] == password:
                 print(f"User {username} is validated")
-                return user
+                return User(user_id = user[0], username = user[1], email = user[2], password = user[3], role = user[4])
             else:
                 print(f"User {username} failed to validate")
                 return None
@@ -99,4 +115,24 @@ class User:
             print(f"Authentication error occure. Error: {e}")
             return None
 
+    # VULNERABILITY: Password retrieving method is public
+    def get_user_password(username):
+        query = "SELECT password FROM users WHERE username = %s"
+        db = DatabaseConnection()
+        found_password = db.execute_select_query(query,(username,))
+        if found_password:
+            # VULNERABILITY: Too much information provided.
+            print(f"User password found. Password: {found_password}")
+            return found_password[0]
+        else:
+            # VULNERABILITY: Too much information provided.
+            print(f"User by {username} not found when looking for pasword")
+            return None
 
+    def create_key_pair(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'role': self.role
+        }

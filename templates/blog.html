@@ -1,31 +1,43 @@
 {% extends "./partials/head.html" %}
 {% block content %}
 
+<div class="titleBox">
+    <h1 class="completedTitle">
+        BLOG.TITLE |SAFE
+    </h1>
+</div>
 
-    <div class="titleBox">
-        <h1 class="completedTitle">
-            BLOG.TITLE |SAFE
-        </h1>
-    </div>
+<div class="completedBox"></div>
+    <form method="POST" action="{{ url_for('delete_blog', blog_id=blog_id)}}" id="completedDelete">
+        <div class="completedInfo">
+            <span class="completedUser">
+                BLOG.USERNAME |SAFE
+            </span>
+            <span class="completedCreated">
+                BLOG.CREATED_AT
+            </span>
+        </div>
 
-    <div class="completedInfo">
-        <span class="completedUser">
-            BLOG.USERNAME |SAFE
-        </span>
-        <span class="completedCreated">
-            BLOG.CREATED_AT
-        </span>
-    </div>
 
-    <div class="contentBox">
         <div class="completedBody">
             BLOG.CONTENT|SAFE
         </div>
         <div class="completedButtons">
             <a href="{{ url_for('home')}}" class="clearBtn">Return Home</a>
-            {% if session.user_id == blog.user_id or session.role == 'admin' %}
-            <button type="button" class="deleteBtn" >Delete</button>
+            <!--FIX BELOW-->
+            {% if session.user_id == user_id or session.role == 'admin' %}
+            <button type="button" class="deleteBtn btn btn-outline-success my-2 my-sm-0">Delete</button>
+            {% endif %}
         </div>
-    </div>
+    </form>
+</div>
 
+
+<script>
+    document.querySelector(".deleteBtn").addEventListener('click',()=>{
+        if (confirm("Are you sure you want to delete this Blog?")){
+            document.getElementById("completedDelete").submit()
+        }
+    })
+</script>
 {% endblock %}

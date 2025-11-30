@@ -19,7 +19,7 @@
                         pattern="[a-zA-Z0-9_]+"
                         title="Only letters, numbers, and underscores allowed"
                         required>
-                    <div class="usernameHelp helpBox hidden">Only letters, numbers, and underscores</div>
+                    <span id="usernameHelp" class="helpBox hidden">Only letters, numbers, and underscores</span>
                 </div>
                 <div class="formBox">
                     <label for="email">Email</label>
@@ -30,6 +30,8 @@
                         placeholder="your.email@example.com"
                         required>
                 </div>
+
+
                 <div class="formBox">
                     <label for="password">
                         Password
@@ -42,8 +44,19 @@
                         placeholder="Create a password"
                         minlength="16"
                         required>
-                    <div class="passwordHelp helpBox hidden">Must be at least 16 characters long</div>
+
+                    <span class="revealPassBtn">
+                        <label for="revealPass">
+                            Show Password
+                        </label>
+                        <input
+                        name="revealPass"
+                        style="margin: 0; padding: 0" type="checkbox" onclick="revealPassword('password')">
+                    </span>
+
+                    <span id="passwordHelp" class="helpBox hidden">Must be at least 16 characters long</span>
                 </div>
+
                 <div class="formBox">
                     <label for="confirm_password">
                         Confirm Password
@@ -56,7 +69,17 @@
                         placeholder="Re-enter your password"
                         minlength="16"
                         required>
-                    <span class="confirmHelp helpBox hidden">Enter the same password to confirm</span>
+
+                    <span class="revealPassBtn">
+                        <label for="revealPass">
+                            Show Password
+                        </label>
+                        <input
+                        name="revealPass"
+                        style="margin: 0; padding: 0" type="checkbox" onclick="revealPassword('confirm_password')">
+                    </span>
+
+                    <span id="confirmHelp" class="helpBox hidden">Enter the same password to confirm</span>
                 </div>
                 <button type="submit" class="btnSubmit">Register</button>
             </form>
@@ -67,4 +90,23 @@
         </div>
     </div>
 
+
+    <script>
+        function toggleHelp(selected_type){
+            const ibtn_element = document.getElementById(selected_type);
+            if (ibtn_element.style.display === "none"){
+                ibtn_element.style.display = "block"
+            } else {
+                ibtn_element.style.display = "none"
+            }
+        }
+        function revealPassword(selected_type){
+            const reveal_input = document.getElementById(selected_type)
+            if(reveal_input.type == "password"){
+                reveal_input.type = "text";
+            } else {
+                reveal_input.type = "password";
+            }
+        }
+    </script>
 {% endblock %}

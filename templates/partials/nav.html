@@ -12,13 +12,13 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         {% if 'user_id' in session %}
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link active" aria-current="page" href="{{url_for('home')}}">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Create</a>
+          <a class="nav-link" href="{{url_for('create_blog')}}">Create</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Log-Out</a>
+          <a class="nav-link" href="{{url_for('logout')}}">Log-Out</a>
         </li>
         {% else %}
         <li class="nav-item">
