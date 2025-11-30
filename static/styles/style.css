@@ -207,6 +207,10 @@ html {
     background-color: green;
 }
 
+.searchedTerm {
+    border: 2px solid red;
+}
+
 /*
     Create CSS
 */

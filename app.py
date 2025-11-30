@@ -83,6 +83,7 @@ def home():
     user_search = False
     search_made = False
     search_blogs = []
+    search_word = None
 
     # Perform user search
     if request.method == "POST":
@@ -99,7 +100,7 @@ def home():
             user_search = True
 
     # Render the details in home.html
-    return render('home.html', blogs = blog_results, search_blogs = search_blogs, user_search = user_search, search_made = search_made)
+    return render('home.html', blogs = blog_results, search_blogs = search_blogs, user_search = user_search, search_made = search_made, search_word = search_word)
 
 
 # VULNERABILITY: XSS is stored on the database and can be retrieved
@@ -152,11 +153,6 @@ def delete_blog():
 # TO-DO!!!
 # VULNERABILITY: User name is reflected in the URL
 # DOM based XSS
-@app.route('/user/<name>')
-def userPage(name):
-    user = User.get_user_by_username(name)
-    return f"<h1>Hello {name}</h1>"
-
 
 # Method for logging out of a session
 @app.route('/logout')
@@ -165,9 +161,6 @@ def logout():
     session.clear()
     # Re-directing to login page
     return redirect('/')
-
-
-
 
 
 if __name__ == "__main__":

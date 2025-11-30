@@ -62,6 +62,19 @@
                     {% endif %}
                 </h4>
             </div>
+
+            <!--
+                VULNERABILITY: Reflected XSS
+            -->
+            {% if search_word %}
+            <div class="searchedTerm">
+                <h6>
+                    <u>You searched:</u>
+                    {{ search_word| safe}}
+                </h6>
+            </div>
+            {% endif %}
+
             {% if search_blogs %}
             {% for blog in search_blogs %}
                 <div class="blogBox">
@@ -70,11 +83,11 @@
                             VULNERABILITY: Reflected XSS
                         -->
                         <h5 class="searchName">
-                            <a href="{{url_for('blog', blog_id=blog[0])}}">{{ blog[1]|safe }}</a>
+                            <a href="{{url_for('blog', blog_id=blog[0])}}">{{ blog[2]|safe }}</a>
                         </h5>
                     </div>
                     <div class="blogFacts">
-                        <span class="searchFact">{{ blog[2]|safe }}</span>
+                        <span class="searchFact">{{ blog[3]|safe }}</span>
                     </div>
                 </div>
             {% endfor %}
@@ -121,6 +134,9 @@
             </div>
             {% endif %}
         </div>
+
+        <div id="xss"></div>
+
 
     </div>
 </div>

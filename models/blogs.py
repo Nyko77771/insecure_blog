@@ -93,10 +93,19 @@ class Blog():
             return None
 
     def search(search_word):
+        """
+        Secure Version:
+            db = DatabaseConnection()
+            query = "SELECT b.id, b.title, u.username FROM blogs b JOIN users u ON b.user_id = u.id WHERE b.title LIKE %s"
+            try:
+                pattern = "%" + search_word + "%"
+                result = db.execute_select_query(query, (pattern,))
+
+        """
         db = DatabaseConnection()
-        query = "SELECT b.id, b.title, u.username FROM blogs b JOIN users u ON b.user_id = u.id WHERE b.title LIKE %s"
+        query = "SELECT * FROM blogs b JOIN users u ON b.user_id = u.id WHERE b.title LIKE %s"
         try:
-            pattern = "%" + search_word + "%"
+            pattern = f"%{search_word}%"
             result = db.execute_select_query(query, (pattern,))
             if result:
                 print(f"Search items found. Result: {result}")

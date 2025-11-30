@@ -5,6 +5,7 @@
     <h1 class="completedTitle">
         {{ blog.title|safe }}
     </h1>
+    <p class="anouncement">INSECURE Version: XSS Vulnerability (DOM)</p>
 </div>
 
 
@@ -64,6 +65,14 @@
 
     function clearText(){
         document.getElementById('comment').value = ""
+    }
+
+    // VULNERABILITY: DOM based XSS
+    var user_params = new URLSearchParams(document.location.search);
+    var name = user_params.get("name");
+    console.log(name);
+    if (name) {
+        document.write(name)
     }
 </script>
 {% endblock %}
