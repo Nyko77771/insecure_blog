@@ -12,6 +12,7 @@ app = Flask(__name__)
 render = render_template
 # VULNERABILITY: Hard Coded Secret Key
 app.secret_key = "BAD_SECRET"
+# Setting up a debugging enviroment
 app.config["DEBUG"] = True
 
 # ROUTES
@@ -40,7 +41,7 @@ def index():
             return redirect('home')
         else:
             flash("Username does not exist")
-            return redirect('login')
+            return redirect('/')
     return render('login.html')
 
 # Creating a route decorator for registration
@@ -57,13 +58,14 @@ def register():
             email_result = User.get_user_by_email(email)
 
             if (name_result is None) or (email_result is None):
-                user = User.db_save()
+                new_user = User(username, email, password)
+                new_user.db_save()
                 flash("Registration Successfull")
-                redirect('login.html')
+                return redirect('/')
             else:
                 flash("")
                 flash("Unable to Register")
-                redirect('register.html')
+                return redirect('new')
     return render('register.html')
 
 # VULNERABILITY: User input is reflected back without any checks or validation
@@ -75,37 +77,72 @@ def home():
     print(f'Username of session: {username}')
     blog_results = Blog.get_all_user_blogs(username)
 
+    print(f"First user blog found: {blog_results[0]}")
+
+    # Creating local variables for tracking status
     user_search = False
     search_made = False
     search_blogs = []
 
+    # Perform user search
     if request.method == "POST":
+        # Get searched word from form
         search_word = request.form.get('search')
+        # Register search was performed
         search_made = True
-        print(f"Search made: {search_made}")
+        # Return searched blogs
         search_blogs = Blog.search(search_word)
-        print(f"Blog searches: {search_blogs} ")
+        print(f"Found blog by search: {search_blogs}")
 
+        # Register that user searched if blogs were found
         if search_blogs:
             user_search = True
 
+    # Render the details in home.html
     return render('home.html', blogs = blog_results, search_blogs = search_blogs, user_search = user_search, search_made = search_made)
 
 
-# TO-DO!!!
 # VULNERABILITY: XSS is stored on the database and can be retrieved
 # Stored XSS
-@app.route('/create')
+@app.route('/create', methods=["GET", "POST"])
 def create_blog():
+    if request.method == "POST":
+        blog_title = request.form.get('title')
+        blog_content = request.form.get('content')
+
+        if blog_title and blog_content:
+            user_id = session['user_id']
+            user_blog = Blog(user_id, blog_title, blog_content)
+            blog_date = user_blog.created_at.date
+            result = user_blog.db_save()
+            if result:
+                print('Created new blog')
+                return render('blog.html', blog = user_blog, blog_date = blog_date)
+            else:
+                flash("Unable to create the blog")
+                return redirect('create')
+
     return render('create.html')
 
 # To-Complete
-@app.route('/blog')
-def blog_page():
-    session['user_id'] = 1
-    session['role'] = 'admin'
-    return render('blog.html', blog_id = 1, )
+@app.route('/blog/<int:blog_id>')
+def blog(blog_id):
 
+    returned_data = Blog.get_blog_by_id(blog_id)
+    print(f"Blog returned: {returned_data}")
+    blog = {}
+    try:
+        blog['title'] = returned_data[0][0]
+        blog['content'] = returned_data[0][2]
+        blog['username'] = returned_data[0][1]
+    except Exception as e:
+        print("Error occured creating Blog Page")
+        return render('home.html')
+
+
+    return render('blog.html', blog = blog)
+
+#
 @app.route('/delete_blog', methods=['POST'])
 def delete_blog():
     id = request.form.get('blog_id')
@@ -117,7 +154,8 @@ def delete_blog():
 # DOM based XSS
 @app.route('/user/<name>')
 def userPage(name):
-    return "<h1>Hello {}</h1>".format(name)
+    user = User.get_user_by_username(name)
+    return f"<h1>Hello {name}</h1>"
 
 
 # Method for logging out of a session
@@ -125,7 +163,6 @@ def userPage(name):
 def logout():
     # Clearing session
     session.clear()
-
     # Re-directing to login page
     return redirect('/')
 

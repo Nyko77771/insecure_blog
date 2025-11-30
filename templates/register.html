@@ -5,6 +5,14 @@
         <div class="middleBox">
             <h2>Create New Account</h2>
 
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+                <p class="flashNotice">{{ message }}</p>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
             <form method="POST" action="{{ url_for('register') }}" id="registerForm">
                 <div class="formBox">
                     <label for="username">

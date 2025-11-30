@@ -3,31 +3,53 @@
 
 <div class="titleBox">
     <h1 class="completedTitle">
-        BLOG.TITLE |SAFE
+        {{ blog.title|safe }}
     </h1>
 </div>
 
-<div class="completedBox"></div>
+
+<div class="completedBox">
+
     <form method="POST" action="{{ url_for('delete_blog', blog_id=blog_id)}}" id="completedDelete">
+
         <div class="completedInfo">
             <span class="completedUser">
-                BLOG.USERNAME |SAFE
+                {{ blog.username|safe}}
             </span>
+            {% if blog_date %}
             <span class="completedCreated">
-                BLOG.CREATED_AT
+                {{ blog_date |safe}}
             </span>
+            {% endif %}
         </div>
-
 
         <div class="completedBody">
-            BLOG.CONTENT|SAFE
+            {{ blog.content|safe }}
         </div>
+
         <div class="completedButtons">
             <a href="{{ url_for('home')}}" class="clearBtn">Return Home</a>
             <!--FIX BELOW-->
             {% if session.user_id == user_id or session.role == 'admin' %}
+
             <button type="button" class="deleteBtn btn btn-outline-success my-2 my-sm-0">Delete</button>
             {% endif %}
+
+        </div>
+
+    </form>
+</div>
+
+<div class="completedBox">
+    <form action="POST" action="#" id="completedDelete">
+        <div class="completedComments">
+            <div class="commentsArea">
+                <textarea id="comment" name="comment" id="createComment" placeholder="Add comment..." cols="50" rows="5"></textarea>
+            </div>
+            <div class="commentsBtns">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Create</button>
+                <button type="button" class="btn btn-outline-success my-2 my-sm-0 btnCancel" onclick="clearText()">Cancel</button>
+            </div>
         </div>
     </form>
 </div>
@@ -39,5 +61,9 @@
             document.getElementById("completedDelete").submit()
         }
     })
+
+    function clearText(){
+        document.getElementById('comment').value = ""
+    }
 </script>
 {% endblock %}

@@ -43,7 +43,7 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 
                     {% if user_search %}
-                        <a href="{{url_for('home')}}" class="clearBtn">Clear</a>
+                        <button type="button" class="btn btn-outline-success my-2 my-sm-0 clearBtn" onclick="clearSearch()">Clear</button>
                     {% endif %}
                 </div>
             </form>
@@ -54,7 +54,7 @@
 
         <div class="blogsBox">
             <div class="blogsTitle">
-                <h4>
+                <h4 id="searchTitle">
                     {% if user_search %}
                     Found Blogs:
                     {% elif search_made %}
@@ -69,12 +69,12 @@
                         <!--
                             VULNERABILITY: Reflected XSS
                         -->
-                        <h5>
-                            <a href="{{url_for(create_blog)}}">{{ blog.name|safe }}</a>
+                        <h5 class="searchName">
+                            <a href="{{url_for('blog', blog_id=blog[0])}}">{{ blog[1]|safe }}</a>
                         </h5>
                     </div>
                     <div class="blogFacts">
-                        <span>{{ blog.username }}</span>
+                        <span class="searchFact">{{ blog[2]|safe }}</span>
                     </div>
                 </div>
             {% endfor %}
@@ -101,13 +101,13 @@
             <div class="blogBox">
                 <div class="blogTitle">
                     <h5>
-                        <a href="">
-                            {{ blog.name|safe }}
+                        <a href="{{url_for('blog', blog_id=blog[0])}}">
+                            {{ blog[1]|safe }}
                         </a>
                     </h5>
                 </div>
                 <div class="blogFacts">
-                    <span>{{ blog.username }}</span>
+                    <span>{{ blog[2] }}</span>
                 </div>
             </div>
             {% endfor %}
@@ -124,6 +124,19 @@
 
     </div>
 </div>
+
+<script>
+    function clearSearch(){
+        document.querySelector("#searchTitle").innerHTML = ""
+
+        document.querySelectorAll(".searchName").forEach((element) => {
+            element.innerHTML = "";
+        });
+        document.querySelectorAll(".searchFact").forEach((element) => {
+            element.innerHTML = "";
+        });
+    }
+</script>
 
 {% endblock %}
 
