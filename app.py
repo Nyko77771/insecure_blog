@@ -148,6 +148,10 @@ def blog(blog_id):
 def delete_blog():
     id = request.form.get('blog_id')
     print(f"Blog ID: {id}")
+    result = Blog.delete(id)
+    if result:
+        print('Blog deleted')
+        return redirect('home')
     return None
 
 # TO-DO!!!

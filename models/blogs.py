@@ -46,11 +46,11 @@ class Blog():
             print(f"An exception occured. Error: {e}")
             return False
 
-    def delete(self):
+    def delete(blog_id):
         db = DatabaseConnection()
         query = "DELETE FROM posts WHERE id = %s"
         try:
-            result = db.execute_update_query(query, (self.id,))
+            result = db.execute_update_query(query, (blog_id,))
             print(f"Blog Id {result['id']} deleted.")
             return True
         except Exception as e:

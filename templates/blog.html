@@ -1,60 +1,60 @@
 {% extends "./partials/head.html" %}
 {% block content %}
+<div class="contentBox2">
+    <div class="titleBox">
+        <h1 class="completedTitle">
+            {{ blog.title|safe }}
+        </h1>
+        <p class="welcome">INSECURE Version: XSS Vulnerability (DOM)</p>
+    </div>
 
-<div class="titleBox">
-    <h1 class="completedTitle">
-        {{ blog.title|safe }}
-    </h1>
-    <p class="anouncement">INSECURE Version: XSS Vulnerability (DOM)</p>
-</div>
 
+    <div class="completedBox">
 
-<div class="completedBox">
+        <form method="POST" action="{{ url_for('delete_blog', blog_id=blog_id)}}" id="completedDelete">
 
-    <form method="POST" action="{{ url_for('delete_blog', blog_id=blog_id)}}" id="completedDelete">
-
-        <div class="completedInfo">
-            <span class="completedUser">
-                {{ blog.username|safe}}
-            </span>
-            {% if blog_date %}
-            <span class="completedCreated">
-                {{ blog_date |safe}}
-            </span>
-            {% endif %}
-        </div>
-
-        <div class="completedBody">
-            {{ blog.content|safe }}
-        </div>
-
-        <div class="completedButtons">
-            <a href="{{ url_for('home')}}" class="clearBtn">Return Home</a>
-            <!--FIX BELOW-->
-            {% if session.user_id == user_id or session.role == 'admin' %}
-
-            <button type="button" class="deleteBtn btn btn-outline-success my-2 my-sm-0">Delete</button>
-            {% endif %}
-
-        </div>
-
-    </form>
-</div>
-
-<div class="completedBox">
-    <form action="POST" action="#" id="completedDelete">
-        <div class="completedComments">
-            <div class="commentsArea">
-                <textarea id="comment" name="comment" id="createComment" placeholder="Add comment..." cols="50" rows="5"></textarea>
+            <div class="completedInfo">
+                <span class="completedUser">
+                    {{ blog.username|safe}}
+                </span>
+                {% if blog_date %}
+                <span class="completedCreated">
+                    {{ blog_date |safe}}
+                </span>
+                {% endif %}
             </div>
-            <div class="commentsBtns">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Create</button>
-                <button type="button" class="btn btn-outline-success my-2 my-sm-0 btnCancel" onclick="clearText()">Cancel</button>
-            </div>
-        </div>
-    </form>
-</div>
 
+            <div class="completedBody">
+                {{ blog.content|safe }}
+            </div>
+
+            <div class="completedButtons">
+                <a href="{{ url_for('home')}}" class="clearBtn">Return Home</a>
+                <!--FIX BELOW-->
+                {% if session.user_id == user_id or session.role == 'admin' %}
+
+                <button type="button" class="deleteBtn btn btn-outline-success my-2 my-sm-0">Delete</button>
+                {% endif %}
+
+            </div>
+
+        </form>
+    </div>
+
+    <div class="completedBox">
+        <form action="POST" action="#" id="completedDelete">
+            <div class="completedComments">
+                <div class="commentsArea">
+                    <textarea id="comment" name="comment" id="createComment" placeholder="Add comment..." cols="50" rows="5"></textarea>
+                </div>
+                <div class="commentsBtns">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Create</button>
+                    <button type="button" class="btn btn-outline-success my-2 my-sm-0 btnCancel" onclick="clearText()">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 <script>
     document.querySelector(".deleteBtn").addEventListener('click',()=>{
@@ -69,10 +69,10 @@
 
     // VULNERABILITY: DOM based XSS
     var user_params = new URLSearchParams(document.location.search);
-    var name = user_params.get("name");
+    var name = user_params.get("welcome");
     console.log(name);
     if (name) {
-        document.write(name)
+        document.getElementById('welcome').innerHTML = "<p class='welcome'> Welcome, " + name + ".</p>";
     }
 </script>
 {% endblock %}

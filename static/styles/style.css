@@ -7,15 +7,17 @@ html {
 
 .appLogo {
     margin-left: 5px;
+    margin-bottom: 6px;
 }
 
 .contentBox {
-    margin-top: 60px;
+    margin-top: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-    height: 570px;
+    padding: 10px;
+    min-height: 590px;
+    overflow-y: auto;
 }
 
 .middleBox {
@@ -24,7 +26,7 @@ html {
     border-radius: 8px;
     box-shadow: 0 2px 10px;
     width: 100%;
-    max-width: 500px;
+    max-width: 550px;
     max-height: 580px;
     overflow-x: hidden;
     overflow-y: scroll;
@@ -89,14 +91,14 @@ html {
     text-align: center;
     width: 100vw;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     height: 70px;
 }
 
-.footerBox h2 {
+.footerBox div {
     bottom: 0;
-    text-align: center;
-    font-size: 28px;
+    font-size: 12px;
+    width: 100vw;
 }
 
 .helpBox {
@@ -127,7 +129,15 @@ html {
 /*
     Home CSS
 */
-.homeBox {}
+.contentBox2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+    min-height: 500px;
+    overflow-y: scroll;
+    border: 2px solid black;
+}
 
 .titleBox {
     text-align: center;
@@ -141,7 +151,7 @@ html {
 }
 
 .contentBox {
-    max-height: 480px;
+    max-height: 530px;
 }
 
 .searchBox {
