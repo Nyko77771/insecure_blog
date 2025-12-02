@@ -21,19 +21,19 @@ class DatabaseConnection:
 
     def _init_connection(self):
         try:
-            """
+
             dotenv_path = join(dirname(__file__), '.env')
             load_dotenv(dotenv_path)
             DATABASE_PASSWORD = os.environ.get("MYSQL_PASSWORD")
-            """
 
             self._connection = mysql.connect(
                 host = "localhost",
                 user = "root",
                 # VULNERABILITY: Sensitive Data Exposure.
-                password = "VeryLongANDB0r1nGAns1",
+                password = DATABASE_PASSWORD,
                 database = "blog_app"
             )
+
             print("MySQL connection established")
         except Exception as e:
             print(f"Failed to connect to MySQL. Error: {e}")
@@ -48,18 +48,13 @@ class DatabaseConnection:
             return None
         try:
             cursor = self._connection.cursor()
-            if params:
-                cursor.execute(query,params)
-            else:
-                # VULNERABILITY: SQL Injection - Query is unparameterized / No params specified. Can be influenced by user
-                cursor.execute(query)
+            cursor.execute(query,params)
             result = cursor.fetchall()
             cursor.close()
             print("Query executed. Rows returned: {len(result)}")
             return result
         except Exception as e:
-            # VULNERABILITY: Exposes details of an error.
-            print(f"Query error: {e}")
+            print(f"SELECT query execution failed.")
             return None
 
     def execute_insert_query(self,query, params=None):
@@ -68,20 +63,14 @@ class DatabaseConnection:
             return None
         try:
             cursor = self._connection.cursor()
-            if params:
-                cursor.execute(query,params)
-            else:
-                # VULNERABILITY: SQL Injection - Query is unparameterized / No params specified. Can be influenced by user
-                cursor.execute(query)
-
+            cursor.execute(query,params)
             self._connection.commit()
             result_id = cursor.lastrowid
             cursor.close()
             print(f"Successfully inserted {result_id}")
             return result_id
         except Exception as e:
-            # VULNERABILITY: Detailed error message.
-            print(f"Insert query error: {e}")
+            print(f"Insert query execution failed")
             return None
 
     def execute_update_query(self, query, params=None):
@@ -90,12 +79,7 @@ class DatabaseConnection:
             return None
         try:
             cursor = self._connection.cursor()
-            if params:
-                cursor.execute(query, params)
-            else:
-                # VULNERABILITY: SQL Injection - Query is unparameterized / No params specified. Can be influenced by user
-                cursor.execute(query)
-
+            cursor.execute(query, params)
             self._connection.commit()
             result_id = cursor.lastrowid
             cursor.close()
@@ -103,7 +87,7 @@ class DatabaseConnection:
             return result_id
         except Exception as e:
             # VULNERABILITY: Detailed error message.
-            print(f"Update error. Error: {e}")
+            print(f"Update execution error occured.")
 
     def close(self):
         if self._connection:

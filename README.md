@@ -29,9 +29,9 @@ The application contains two versions: Secure and Insecure.
 
 This project addresses the following learning requirements:
 
-**LO2** - Evaluate, develop and implement programming solutions for secure development.
-**LO3** - Appraise trade-ofs in performance, usability, and other quality attributes.
-**LO4** - Identify, analyze and evaluate the ethical effects and impacts of design decisions.
+- **LO2** - Evaluate, develop and implement programming solutions for secure development.
+- **LO3** - Appraise trade-ofs in performance, usability, and other quality attributes.
+- **LO4** - Identify, analyze and evaluate the ethical effects and impacts of design decisions.
 
 ## Features
 
@@ -94,13 +94,13 @@ cd insecure_blog
 **_Insecure_**:
 
 ```bash
-git checkout insecure
+git checkout insecure_blog
 ```
 
 **_Secure_**
 
 ```bash
-git checkout secure
+git checkout secure_blog
 ```
 
 ### 3. Create Virtual Environment
@@ -176,6 +176,10 @@ Access the application at: https://localhost:5000
 Insert below default user into your MySQL database/
 
 | _Username_ | _Password_ | _Role_ |
+
+---
+
+->
 | nykyta | nyk123 | admin |
 | testuser | pass123 | regular |
 
@@ -269,6 +273,6 @@ For any issues or question or questions, either email or open an issue on GitHub
 
 ## License
 
-This porject is licensed unfder the MIT license.
+This project is licensed under the MIT license.
 
 **For Educational Use Only**: This application is strictly made for educational purpose only. Insecure version should not be used for production purpose.

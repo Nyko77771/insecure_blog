@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS comments (
 -- Logs table
 CREATE TABLE IF NOT EXISTS logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    actionType VARCHAR(100) NOT NULL,
+    action_type VARCHAR(100) NOT NULL,
     user_id INT NULL,
     details TEXT,
     ip_address VARCHAR(50),
@@ -43,6 +43,15 @@ CREATE TABLE IF NOT EXISTS logs (
 );
 -- Create and Insert 1 admin class
 -- Used for testing
+-- Admin User
 INSERT INTO users (username, email, password, role)
 VALUES ('nykyta', 'nyk@example.com', 'nyk123', 'admin') ON DUPLICATE KEY
 UPDATE username = username;
+-- Regular User
+INSERT INTO users (username, email, password, role)
+VALUES (
+        'testuser',
+        'test@email.com',
+        'pass123',
+        'regular'
+    );
