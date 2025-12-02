@@ -25,13 +25,15 @@ class DatabaseConnection:
             dotenv_path = join(dirname(__file__), '.env')
             load_dotenv(dotenv_path)
             DATABASE_PASSWORD = os.environ.get("MYSQL_PASSWORD")
+            DATABASE_HOST = os.environ.get("MYSQL_HOST")
+            DATABASE_USER = os.environ.get("MYSQL_USER")
+            DATABASE= os.environ.get("MYSQL_DATABASE")
 
             self._connection = mysql.connect(
-                host = "localhost",
-                user = "root",
-                # VULNERABILITY: Sensitive Data Exposure.
+                host = DATABASE_HOST,
+                user = DATABASE_USER,
                 password = DATABASE_PASSWORD,
-                database = "blog_app"
+                database = DATABASE
             )
 
             print("MySQL connection established")

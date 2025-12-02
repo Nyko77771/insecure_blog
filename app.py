@@ -2,6 +2,8 @@
 from flask import Flask, render_template, request, session, redirect, flash
 # Imporing dotenv library for accessing dotenv variables
 from dotenv import load_dotenv
+# Importing datetime's timedelta method for time manipulation
+from datetime import timedelta
 # Importing my models:
 from models.user import User
 from models.blogs import Blog
@@ -9,11 +11,15 @@ from models.blogs import Blog
 
 # Creating flask instance
 app = Flask(__name__)
+# Making an alias for render function
 render = render_template
 # VULNERABILITY: Hard Coded Secret Key
+
+
 app.secret_key = "BAD_SECRET"
 # Setting up a debugging enviroment
 app.config["DEBUG"] = True
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=20)
 
 # ROUTES
 
@@ -154,10 +160,6 @@ def delete_blog():
         return redirect('home')
     return None
 
-# TO-DO!!!
-# VULNERABILITY: User name is reflected in the URL
-# DOM based XSS
-
 # Method for logging out of a session
 @app.route('/logout')
 def logout():
@@ -166,6 +168,6 @@ def logout():
     # Re-directing to login page
     return redirect('/')
 
-
+# Making sure the app.py is automatically run when it is the main file.
 if __name__ == "__main__":
     app.run()
