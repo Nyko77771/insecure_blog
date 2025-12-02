@@ -1,4 +1,4 @@
-![Extension Logo Screenshot](/static/images/Logo.png)
+![Extension Logo Screenshot](/images/Logo.png)
 
 # Insecure and Secure Blog Application
 
