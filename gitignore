@@ -1,0 +1,18 @@
+# Directories and Files to be ignored from commit
+# Databases
+*.sql
+database/
+
+# Enviromental Variable
+.env
+*.env
+
+# Python's Virtual Enviroment Folder
+venv/
+virt/
+
+# Python's Cache File
+__pycache__/
+
+# Generated Logs
+*.log
