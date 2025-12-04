@@ -22,7 +22,7 @@ class Logger:
         return self._initialised
 
     # Method for creating and putting logs onto database
-    def log(self, action, user_id, details, ip_address = None):
+    def log(self, action, details, user_id, ip_address = None):
         time = datetime.now(timezone.utc)
 
         query = "INSERT INTO logs (actionType, user_id, details, ip_address, created_at) VALUES (%s, %s, %s, %s, %s)"

@@ -22,8 +22,10 @@ render = render_template
 # Creating talisman variable
 talisman = Talisman(app)
 
+# Specifying env path for obtaining the env variable
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
+# Assigning secret
 app.secret_key = os.environ.get("FLASK_SECRET")
 # Setting up a debugging enviroment
 app.config["DEBUG"] = True
@@ -40,13 +42,10 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=20)
 # Defining Content Security Policy
 # Telling the browser to load resources that are of the same origin.
 # Used to prevent XSS
-
-SELF = '\'self\''
-
-csp = {"default-src": SELF,
+csp = {"default-src": "'self'",
        "img-src": '*',
-       "style-src": [ SELF, "https://cdn.jsdelivr.net"],
-       "script-src":[ SELF, "http://127.0.0.1:5000/bfa76213-edda-4b7c-ac9f-8e456ba8e500", "https://cdn.jsdelivr.net", "nonce"]}
+       "style-src": [ "'self'", "https://cdn.jsdelivr.net"],
+       "script-src":[ "'self'", "http://127.0.0.1:5000/bfa76213-edda-4b7c-ac9f-8e456ba8e500", "https://cdn.jsdelivr.net", "nonce"]}
 
 # HTTP Strict Transport Security Header
 # Tells browsers to connect via HTTPS
@@ -58,7 +57,7 @@ talisman.session_cookie_http_only = True
 talisman.session_cookie_secure = True
 talisman.x_xss_protection = True # X-XSS Protection
 # talisman.x_content_type_options = True #Prevent MIME attacks
-talisman.session_cookie_samesite = "Lax"
+talisman.session_cookie_samesite = "Strict"
 talisman.content_security_policy_nonce_in=["script-src"]
 
 # Adding headers to talisman
@@ -66,7 +65,8 @@ talisman.content_security_policy = csp
 talisman.strict_transport_security = hsts
 
 # Initialising EventsLogger
-log = EventLogger.init_logger()
+log = EventLogger()
+log.init_logger()
 
 # ROUTES
 
@@ -93,14 +93,18 @@ def index():
             session['username'] = keypair['username']
             session['role'] = keypair['role']
             flash("Successfully Logged-In")
+            # Logging regestration
+            log.log_login("Loggin", "User Successfully logged in", keypair['id'])
             # redirecting to home page
             return redirect('home')
         else:
             flash("Username does not exist")
+            # Logging an attempt at login
+            log.log_unsuccessful_login("Loggin", "User Failed to Log in", session["username"])
             return redirect('/')
     return render('login.html')
 
-# Creating a route decorator for registration
+# Creating a route for registration
 @app.route('/new', methods=["GET","POST"])
 def register():
     if request.method == "POST":
@@ -115,8 +119,12 @@ def register():
 
             if (name_result is None) or (email_result is None):
                 new_user = User(username, email, password)
-                new_user.db_save()
+                result = new_user.db_save()
                 flash("Registration Successfull")
+                user_id = User.get_user_by_username(username)
+                if user_id:
+                    # Making a log entry
+                    log.log_registration("Registation", "User has Registered for the website", user_id)
                 return redirect('/')
             else:
                 flash("")
@@ -124,8 +132,8 @@ def register():
                 return redirect('new')
     return render('register.html')
 
-# VULNERABILITY: User input is reflected back without any checks or validation
-# Reflected XSS
+# Route for home page
+# Page generated after successful login
 @app.route('/home', methods=["GET", "POST"])
 def home():
     # Obtain users blogs and disply them
@@ -155,13 +163,14 @@ def home():
         # Register that user searched if blogs were found
         if search_blogs:
             user_search = True
+            log.log_search("Searched for Blog", "Blog Found", session["user_id"])
 
+        log.log_search("Searched for Blog", "Nothing Found", session["user_id"])
     # Render the details in home.html
     return render('home.html', blogs = blog_results, search_blogs = search_blogs, user_search = user_search, search_made = search_made, search_word = search_word)
 
 
-# VULNERABILITY: XSS is stored on the database and can be retrieved
-# Stored XSS
+# Route for creating a blog
 @app.route('/create', methods=["GET", "POST"])
 def create_blog():
     if request.method == "POST":
@@ -175,14 +184,16 @@ def create_blog():
             result = user_blog.db_save()
             if result:
                 print('Created new blog')
-                return render('blog.html', blog = user_blog, blog_date = blog_date)
+                log.log_blog_creation("Blog Created", "New Blog has Been Created", user_id)
+                return render('blog.html', blog = user_blog, blog_date = blog_date, session = session)
             else:
                 flash("Unable to create the blog")
+                log.log_blog_creation("Blog Not Created", "Attempt to Create a Blog has been Unsuccesful", user_id)
                 return redirect('create')
 
     return render('create.html')
 
-# To-Complete
+# Route for showing blog
 @app.route('/blog/<int:blog_id>')
 def blog(blog_id):
 
@@ -190,30 +201,38 @@ def blog(blog_id):
     print(f"Blog returned: {returned_data}")
     blog = {}
     try:
+        blog["id"] = blog_id
         blog['title'] = returned_data[0][0]
         blog['content'] = returned_data[0][2]
         blog['username'] = returned_data[0][1]
+        blog["user_id"] = returned_data[0][3]
+        log.log_blog_displayed("Blog Displayed", "Blog has been generated for User", session["user_id"])
     except Exception as e:
         print("Error occured creating Blog Page")
+        log.log_blog_displayed("Blog Not Displayed", "Blog has not been generated", session["user_id"])
         return render('home.html')
+    return render('blog.html', blog = blog, session = session)
 
+# Route for Blog Deletion
+@app.route('/delete_blog/<int:id>', methods=['POST'])
+def delete_blog(id):
 
-    return render('blog.html', blog = blog)
-
-#
-@app.route('/delete_blog', methods=['POST'])
-def delete_blog():
-    id = request.form.get('blog_id')
-    print(f"Blog ID: {id}")
-    result = Blog.delete(id)
-    if result:
-        print('Blog deleted')
-        return redirect('home')
-    return None
+    if id:
+        print(f"Blog ID: {id}")
+        user_id = session['user_id']
+        result = Blog.delete(id)
+        if result:
+            print('Blog deleted')
+            log.log_blog_deleted("Blog Deleted", "Blog has been deleted", user_id)
+        else:
+            print('Blog not deleted')
+            log.log_blog_deleted("Blog Not Deleted", "Blog has not been deleted", user_id)
+    return redirect('/home')
 
 # Method for logging out of a session
 @app.route('/logout')
 def logout():
+    log.log_user_logged_out("User Logged Out", "User has successfully logged out", session["user_id"])
     # Clearing session
     session.clear()
     # Re-directing to login page

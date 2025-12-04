@@ -33,7 +33,7 @@ class EventLogger:
 
     # REGISTRATION:
     # Method for logging registration
-    def log_registration(self, action, user_id, details, ip_address):
+    def log_registration(self, action, details, user_id, ip_address=None):
         try:
             if self.logger:
                 self.logger.log(action,user_id,details, ip_address)
@@ -44,7 +44,7 @@ class EventLogger:
             print("Unable to log successful registration")
 
     # Method for logging unsuccessfull registration
-    def log_unsuccessful_registration(self, action, user_id, details, ip_address):
+    def log_unsuccessful_registration(self, action, details, user_id, ip_address=None):
         try:
             if self.logger:
                 self.logger.log(action,user_id,details, ip_address)
@@ -56,7 +56,7 @@ class EventLogger:
 
     # LOGIN
     # Method for logging login
-    def log_login(self, action, user_id, details, ip_address):
+    def log_login(self, action, details, user_id, ip_address=None):
         try:
             if self.logger:
                 self.logger.log(action,user_id,details, ip_address)
@@ -68,7 +68,7 @@ class EventLogger:
 
 
     # Method for logging unsuccessfull login
-    def log_unsuccessful_login(self, action, user_id, details, ip_address):
+    def log_unsuccessful_login(self, action, details, user_id, ip_address=None):
         try:
             if self.logger:
                 self.logger.log(action,user_id,details, ip_address)
@@ -80,7 +80,7 @@ class EventLogger:
 
     # SEARCH
     # Method for logging search
-    def log_search(self, action, user_id, details, ip_address):
+    def log_search(self, action, details, user_id, ip_address=None):
         try:
             if self.logger:
                 self.logger.log(action,user_id,details, ip_address)
@@ -93,7 +93,7 @@ class EventLogger:
 
     # HOME LINKS
     # Method for logging open links
-    def log_home_link(self, action, user_id, details, ip_address):
+    def log_home_link(self, action, details, user_id, ip_address=None):
         try:
             if self.logger:
                 self.logger.log(action,user_id,details, ip_address)
@@ -105,7 +105,7 @@ class EventLogger:
 
     # BLOG CREATION
     # Method for Blog Creation.
-    def log_blog_creation(self, action, user_id, details, ip_address):
+    def log_blog_creation(self, action, details, user_id, ip_address=None):
         try:
             if self.logger:
                 self.logger.log(action,user_id,details, ip_address)
@@ -117,7 +117,7 @@ class EventLogger:
 
     # BLOG DISPLAY
     # Method for registering blog was displayed
-    def log_blog_displayed(self, action, user_id, details, ip_address):
+    def log_blog_displayed(self, action, details, user_id, ip_address=None):
         try:
             if self.logger:
                 self.logger.log(action,user_id,details, ip_address)
@@ -129,7 +129,7 @@ class EventLogger:
 
     # BLOG DELETION
     # Method for showing blog was deleted
-    def log_blog_deleted(self, action, user_id, details, ip_address):
+    def log_blog_deleted(self, action, details, user_id, ip_address=None):
         try:
             if self.logger:
                 self.logger.log(action,user_id,details, ip_address)
@@ -138,3 +138,15 @@ class EventLogger:
             print("Logged blog deleted")
         except Exception as e:
             print("Unable to log blog deletion")
+
+        # BLOG DELETION
+    # Method for showing user logged out
+    def log_user_logged_out(self, action, details, user_id, ip_address=None):
+        try:
+            if self.logger:
+                self.logger.log(action,user_id,details, ip_address)
+            else:
+                logging.info(f"Action: {action} [user: {user_id}] - {details}")
+            print("Logged user logged out")
+        except Exception as e:
+            print("Unable to log logging out")

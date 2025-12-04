@@ -33,7 +33,7 @@ class Blog():
     def update(self):
         self.update_at = datetime.now()
         db = DatabaseConnection()
-        query = "UPDATE posts SET title = %s, content = %s, update_at = %s"
+        query = "UPDATE blogs SET title = %s, content = %s, update_at = %s"
         try:
             result = db.execute_update_query(query, (self.title, self.content, self.update_at,))
             if result:
@@ -45,13 +45,13 @@ class Blog():
 
     def delete(blog_id):
         db = DatabaseConnection()
-        query = "DELETE FROM posts WHERE id = %s"
+        query = "DELETE FROM blogs WHERE id = %s"
         try:
             result = db.execute_update_query(query, (blog_id,))
-            print(f"Blog Id {result['id']} deleted.")
+            print(f"Blog Id {result} deleted.")
             return True
         except Exception as e:
-            print("An exception occured while deleting blog")
+            print(f"An exception occured while deleting blog. Error: {e}")
             return False
 
     def get_all_user_blogs(username):
@@ -72,7 +72,7 @@ class Blog():
 
     def get_blog_by_id(search_id):
         db = DatabaseConnection()
-        query = "SELECT b.title, u.username, b.content FROM blogs b JOIN users u on b.user_id = u.id WHERE b.id = %s"
+        query = "SELECT b.title, u.username, b.content, u.id FROM blogs b JOIN users u on b.user_id = u.id WHERE b.id = %s"
         try:
             result = db.execute_select_query(query, (search_id,))
             if result:

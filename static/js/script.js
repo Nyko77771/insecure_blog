@@ -1,97 +1,58 @@
 // Home Page Function
-// Clear Search Results / Blog Message Function
 
-document.querySelector(".clearBtn").addEventListener('click', ()=> {
-    document.querySelector("#searchTitle").innerHTML = ""
+document.addEventListener("DOMContentLoaded", () => {
 
-    document.querySelectorAll(".searchName").forEach((element) => {
-        element.innerHTML = "";
-    });
-    document.querySelectorAll(".searchFact").forEach((element) => {
-        element.innerHTML = "";
-    });
-})
+    // Clear Search Results / Blog Message Function
+    const clearBtn = document.querySelector(".clearBtn");
+    if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+            const title = document.querySelector("#searchTitle");
+            if (title) title.innerHTML = "";
 
-// Registration Page Functions
-// Reveal help icons
-
-document.querySelectorAll('.btnInfo').forEach((button) =>{
-    button.addEventListener('click', (event) => {
-        const ibtn_selected_type = event.target.dataset.type;
-        const ibtn_element = document.getElementById(ibtn_selected_type);
-        if (ibtn_element.style.display === "none"){
-            ibtn_element.style.display = "block"
-        } else {
-            ibtn_element.style.display = "none"
-        }
-    })
-})
-
-// Reveal Password Input
-
-document.querySelectorAll('.reavealPass').forEach((button) =>{
-    button.addEventListener('click', () => {
-        const ibtn_selected_type = this.dataset.type;
-        const ibtn_element = document.getElementById(ibtn_selected_type);
-        if (ibtn_element.style.display === "none"){
-            ibtn_element.style.display = "block"
-        } else {
-            ibtn_element.style.display = "none"
-        }
-    })
-})
-
-// Blog Page
-// Delete Blog Function
-
-document.querySelector(".deleteBtn").addEventListener('click',()=>{
-        if (confirm("Are you sure you want to delete this Blog?")){
-            document.getElementById("completedDelete").submit()
-        }
-    })
-
-// Clear Comment Function
-
-document.querySelector(".btnCancel").addEventListener('click',()=>{
-    const ibtn_selected_type = this.dataset.type;
-    document.getElementById(ibtn_selected_type).value = ""
-})
-
-
-/*
-function clearSearch(){
-    document.querySelector("#searchTitle").innerHTML = ""
-
-    document.querySelectorAll(".searchName").forEach((element) => {
-        element.innerHTML = "";
-    });
-    document.querySelectorAll(".searchFact").forEach((element) => {
-        element.innerHTML = "";
-    });
-}
-
-
-// Registration Page Functions
-// Reveal help icons
-
-function toggleHelp(selected_type){
-    const ibtn_element = document.getElementById(selected_type);
-    if (ibtn_element.style.display === "none"){
-        ibtn_element.style.display = "block"
-    } else {
-        ibtn_element.style.display = "none"
+            document.querySelectorAll(".searchName").forEach(el => el.innerHTML = "");
+            document.querySelectorAll(".searchFact").forEach(el => el.innerHTML = "");
+        });
     }
-}
 
-// Reveals password input
+    // Registration Page Functions
+    // Reveal help icons
 
-function revealPassword(selected_type){
-    const reveal_input = document.getElementById(selected_type)
-    if(reveal_input.type == "password"){
-        reveal_input.type = "text";
-    } else {
-        reveal_input.type = "password";
+    document.querySelectorAll(".btnInfo").forEach(button => {
+        button.addEventListener("click", (event) => {
+            const id = event.target.dataset.type;
+            const helpBox = document.getElementById(id);
+            if (helpBox){
+                helpBox.classList.toggle("hidden")
+            }
+        });
+    });
+
+    // Reveal Password Input
+    document.querySelectorAll(".revealPass").forEach(checkbox => {
+        checkbox.addEventListener("click", function () {
+            const id = this.dataset.type;
+            const field = document.getElementById(id);
+            if (field) {
+                if (field.type === "password") {
+                    field.type = "text"
+                } else {
+                    field.type = "password"
+                }
+            }
+        });
+    });
+
+    // Clear Comment Function
+    const cancelBtn = document.querySelector(".btnCancel");
+    if (cancelBtn) {
+        cancelBtn.addEventListener("click", function () {
+            const id = this.dataset.type;
+            const field = document.getElementById(id);
+            if (field) {
+                field.value = ""
+            }
+        });
     }
-}
 
-*/
+});
+
