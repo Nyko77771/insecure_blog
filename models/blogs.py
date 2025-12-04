@@ -90,7 +90,7 @@ class Blog():
         query = "SELECT * FROM blogs b JOIN users u ON b.user_id = u.id WHERE b.title LIKE %s"
         try:
             # Parameterized query
-            pattern = "%" +"search_word" + "%"
+            pattern = "%" + search_word + "%"
             result = db.execute_select_query(query, (pattern,))
             if result:
                 print(f"Search items found. Result: {result}")

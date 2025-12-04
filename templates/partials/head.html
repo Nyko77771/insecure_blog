@@ -31,9 +31,14 @@
     <!-- Bootstrap JS-->
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
+     <!-- Link to my JS-->
+      <script nonce="{{ csp_nonce() }}" src="{{ url_for('static', filename='js/script.js')}}">alert("HELLO")</script>
+
+{% if 'user_id' not in session %}
 <div>
     {% include "./partials/footer.html" %}
 </div>
+{% endif %}
 
 </body>
 </html>

@@ -1,5 +1,5 @@
--- Database Creation for blog_app
--- Create database
+Terminal close -- exit!
+blog_app -- Create database
 CREATE DATABASE IF NOT EXISTS blog_app;
 USE blog_app;
 -- Create tables
@@ -45,13 +45,18 @@ CREATE TABLE IF NOT EXISTS logs (
 -- Used for testing
 -- Admin User
 INSERT INTO users (username, email, password, role)
-VALUES ('nykyta', 'nyk@example.com', 'nyk123', 'admin') ON DUPLICATE KEY
+VALUES (
+        'nykyta',
+        'nyk@example.com',
+        '$2b$12$HwHEO/UX0pBlRSTeK4.Pt.0T1bRWmjEcu30iiINHHQ6gXlhABcZrm',
+        'admin'
+    ) ON DUPLICATE KEY
 UPDATE username = username;
 -- Regular User
 INSERT INTO users (username, email, password, role)
 VALUES (
         'testuser',
         'test@email.com',
-        'pass123',
+        '$2b$12$uJGe2y3KHdFNey6rhedMzu09sjzzpcvl6sbIimEOLkcYdMypUHbum',
         'regular'
     );

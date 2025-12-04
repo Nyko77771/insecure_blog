@@ -18,6 +18,7 @@ class EventLogger:
             cls._instance.logger = None
         return cls._instance #return same instance
 
+    @classmethod
     def init_logger(self, logger=None):
         temp_logger = Logger()
         if temp_logger.is_init():

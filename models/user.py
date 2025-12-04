@@ -40,16 +40,26 @@ class User:
                 print(f"New user saved.")
 
     # Method for hashing password
-    def _hash_password(self, password):
+    @staticmethod
+    def _hash_password(password):
         bytes = str(password).encode('utf-8')
         salt = bcrypt.gensalt(12)
         hash = bcrypt.hashpw(bytes, salt)
+        print('Hashed Password')
         return hash.decode()
 
     # Method for checking password
+    @staticmethod
     def verify_password(new_password, stored_password):
+        print("Veryfying passwords")
         new_bytes = str(new_password).encode('utf-8')
-        result = bcrypt.checkpw(new_bytes, stored_password)
+        if isinstance(stored_password, str):
+            stored_bytes = stored_password.encode('utf-8')
+        else:
+            stored_bytes = stored_password
+        print(f"Retrieved: {stored_bytes}, New {new_bytes}")
+        result = bcrypt.checkpw(new_bytes, stored_bytes)
+        print("Match")
         return result
 
     # Method for getting user details from database based on ID
@@ -82,8 +92,8 @@ class User:
         db = DatabaseConnection()
         results = db.execute_select_query(query,(username,))
         if results:
-            print("Data found")
-            return results[0]
+            print(f"Data found: {results[0]}")
+            return results[0][0]
         else:
             print("Not found")
             return None
@@ -114,22 +124,46 @@ class User:
         return None
 
     # Method for authenticating new users
-    # VULNERABILITY: Plain password comparison
-    def authenticate(username, password):
+    @classmethod
+    def authenticate(self, username, password):
         try:
-            db = DatabaseConnection()
-            query = "SELECT * FROM users WHERE username = %s AND password = %s"
 
-            results = db.execute_select_query(query, (username, password,))
-            if results:
-                user = results[0]
-                return User(user_id = user[0], username = user[1], email = user[2], password = user[3], role = user[4])
-            else:
-                print("Failed to validate")
+            retrieved_list = self._get_password(username)
+            if not retrieved_list:
+                print("Nothing found")
                 return None
+            retrieved_password = retrieved_list[0][0]
+
+            performed_comparison = self.verify_password(password, retrieved_password)
+
+            if performed_comparison:
+                db = DatabaseConnection()
+                query = "SELECT * FROM users WHERE username = %s AND password = %s"
+
+                results = db.execute_select_query(query, (username, retrieved_password,))
+                if results:
+                    user = results[0]
+                    return User(user_id = user[0], username = user[1], email = user[2], password = user[3], role = user[4])
+                else:
+                    print("Failed to validate")
+                    return None
         except Exception as e:
-            print("Authentication error occured.")
+            print(f"Authentication error occured. Error {e}")
             return None
+
+    # Method for retrieving password
+    def _get_password(username):
+        query = "SELECT password FROM users WHERE username = %s"
+        db = DatabaseConnection()
+        results = db.execute_select_query(query,(username,))
+        if results:
+            print("Data found")
+            return results
+        else:
+            print("Not found")
+            return None
+
+
 
     # Method for defining key value pairs for the user class
     def create_key_pair(self):

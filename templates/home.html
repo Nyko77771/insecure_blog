@@ -43,7 +43,7 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 
                     {% if user_search %}
-                        <button type="button" class="btn btn-outline-success my-2 my-sm-0 clearBtn" onclick="clearSearch()">Clear</button>
+                        <button type="button" class="btn btn-outline-success my-2 my-sm-0 clearBtn">Clear</button>
                     {% endif %}
                 </div>
             </form>
@@ -63,9 +63,6 @@
                 </h4>
             </div>
 
-            <!--
-                VULNERABILITY: Reflected XSS
-            -->
             {% if search_word %}
             <div class="searchedTerm">
                 <h6>
@@ -79,9 +76,7 @@
             {% for blog in search_blogs %}
                 <div class="blogBox">
                     <div class="blogTitle">
-                        <!--
-                            VULNERABILITY: Reflected XSS
-                        -->
+
                         <h5 class="searchName">
                             <a href="{{url_for('blog', blog_id=blog[0])}}">{{ blog[2]}}</a>
                         </h5>
@@ -140,19 +135,5 @@
 
     </div>
 </div>
-
-<script>
-    function clearSearch(){
-        document.querySelector("#searchTitle").innerHTML = ""
-
-        document.querySelectorAll(".searchName").forEach((element) => {
-            element.innerHTML = "";
-        });
-        document.querySelectorAll(".searchFact").forEach((element) => {
-            element.innerHTML = "";
-        });
-    }
-</script>
-
 {% endblock %}
 

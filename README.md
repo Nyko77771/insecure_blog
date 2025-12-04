@@ -186,8 +186,8 @@ Insert below default user into your MySQL database/
 MySQL Code:
 
 ```sql
-INSERT INTO users (username, email, password, role) VALUES ('nykyta', 'nyk@email.com', 'nyk123', 'admin');
-INSERT INTO users (username, email, password, role) VALUES ('testuser', 'test@email.com', 'pass123', 'regular');
+INSERT INTO users (username, email, password, role) VALUES ('nykyta', 'nyk@email.com', '$2b$12$HwHEO/UX0pBlRSTeK4.Pt.0T1bRWmjEcu30iiINHHQ6gXlhABcZrm', 'admin');
+INSERT INTO users (username, email, password, role) VALUES ('testuser', 'test@email.com', '$2b$12$uJGe2y3KHdFNey6rhedMzu09sjzzpcvl6sbIimEOLkcYdMypUHbum', 'regular');
 ```
 
 - **NOT To be used in Production**
@@ -195,6 +195,8 @@ INSERT INTO users (username, email, password, role) VALUES ('testuser', 'test@em
 ## Tests
 
 _Use the default Accounts above or create your own._
+_nykyta plain password: nyk123_
+_testuser plain password: pass123_
 
 ### Manual Testing (Insecure Version)
 

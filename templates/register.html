@@ -17,7 +17,7 @@
                 <div class="formBox">
                     <label for="username">
                         Username
-                        <button type="button" class="btnInfo" onclick="toggleHelp('usernameHelp')">&#8505;</button>
+                        <button type="button" class="btnInfo" data-type="usernameHelp">&#8505;</button>
                     </label>
                     <input
                         type="text"
@@ -43,7 +43,7 @@
                 <div class="formBox">
                     <label for="password">
                         Password
-                        <button type="button" class="btnInfo" onclick="toggleHelp('passwordHelp')">&#8505;</button>
+                        <button type="button" class="btnInfo" data-type="passwordHelp">&#8505;</button>
                     </label>
                     <input
                         type="password"
@@ -59,7 +59,9 @@
                         </label>
                         <input
                         name="revealPass"
-                        style="margin: 0; padding: 0" type="checkbox" onclick="revealPassword('password')">
+                        style="margin: 0; padding: 0" type="checkbox"
+                        class="revealPass"
+                        data-type="password">
                     </span>
 
                     <span id="passwordHelp" class="helpBox hidden">Must be at least 16 characters long</span>
@@ -68,7 +70,8 @@
                 <div class="formBox">
                     <label for="confirm_password">
                         Confirm Password
-                        <button type="button" class="btnInfo" onclick="toggleHelp('confirmHelp')">&#8505;</button>
+                        <button type="button" class="btnInfo"
+                        data-type="confirmHelp">&#8505;</button>
                     </label>
                     <input
                         type="password"
@@ -84,7 +87,9 @@
                         </label>
                         <input
                         name="revealPass"
-                        style="margin: 0; padding: 0" type="checkbox" onclick="revealPassword('confirm_password')">
+                        style="margin: 0; padding: 0" type="checkbox"
+                        class="revealPass"
+                        data-type="confirm_password">
                     </span>
 
                     <span id="confirmHelp" class="helpBox hidden">Enter the same password to confirm</span>
@@ -98,23 +103,4 @@
         </div>
     </div>
 
-
-    <script>
-        function toggleHelp(selected_type){
-            const ibtn_element = document.getElementById(selected_type);
-            if (ibtn_element.style.display === "none"){
-                ibtn_element.style.display = "block"
-            } else {
-                ibtn_element.style.display = "none"
-            }
-        }
-        function revealPassword(selected_type){
-            const reveal_input = document.getElementById(selected_type)
-            if(reveal_input.type == "password"){
-                reveal_input.type = "text";
-            } else {
-                reveal_input.type = "password";
-            }
-        }
-    </script>
 {% endblock %}

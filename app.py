@@ -1,25 +1,72 @@
 # importing flask methods
 from flask import Flask, render_template, request, session, redirect, flash
+# Importing flask-talisman for secure headers management
+from flask_talisman import Talisman
 # Imporing dotenv library for accessing dotenv variables
 from dotenv import load_dotenv
 # Importing datetime's timedelta method for time manipulation
 from datetime import timedelta
+# Library for finding path to files
+from os.path import dirname, join
+import os
 # Importing my models:
 from models.user import User
 from models.blogs import Blog
+from models.events import EventLogger
 
 
 # Creating flask instance
 app = Flask(__name__)
 # Making an alias for render function
 render = render_template
-# VULNERABILITY: Hard Coded Secret Key
+# Creating talisman variable
+talisman = Talisman(app)
 
-
-app.secret_key = "BAD_SECRET"
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+app.secret_key = os.environ.get("FLASK_SECRET")
 # Setting up a debugging enviroment
 app.config["DEBUG"] = True
+# Creating a timeout time for session
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=20)
+
+
+# Configuring Talisman
+"""
+    1)X-XSS-Protection,
+    2)Strict-Transport-Security,
+    3)Content-Security-Policy
+"""
+# Defining Content Security Policy
+# Telling the browser to load resources that are of the same origin.
+# Used to prevent XSS
+
+SELF = '\'self\''
+
+csp = {"default-src": SELF,
+       "img-src": '*',
+       "style-src": [ SELF, "https://cdn.jsdelivr.net"],
+       "script-src":[ SELF, "http://127.0.0.1:5000/bfa76213-edda-4b7c-ac9f-8e456ba8e500", "https://cdn.jsdelivr.net", "nonce"]}
+
+# HTTP Strict Transport Security Header
+# Tells browsers to connect via HTTPS
+hsts = {"max-age": 31536000, "includeSubDomains": True} # Max age for 1 year
+
+# Enforcing Security Headers
+talisman.force_https = True
+talisman.session_cookie_http_only = True
+talisman.session_cookie_secure = True
+talisman.x_xss_protection = True # X-XSS Protection
+# talisman.x_content_type_options = True #Prevent MIME attacks
+talisman.session_cookie_samesite = "Lax"
+talisman.content_security_policy_nonce_in=["script-src"]
+
+# Adding headers to talisman
+talisman.content_security_policy = csp
+talisman.strict_transport_security = hsts
+
+# Initialising EventsLogger
+log = EventLogger.init_logger()
 
 # ROUTES
 
@@ -32,12 +79,15 @@ def index():
         username = request.form.get('username')
         password = request.form.get('password')
 
+        print(f"Retrieved login details: {username}, {password}")
         # Using user authentication method to see if user exists
-        user = User.authenticate(username, password)
+        result = User.authenticate(username, password)
 
-        if user:
+        if result:
+            print(f"Result: {result.create_key_pair()}")
+            keypair =result.create_key_pair()
             # Creating key value pair for user object
-            keypair = user.create_key_pair()
+            print(f"User: {keypair}")
             # Creating session variables for keeping track of logged in user
             session['user_id'] = keypair['id']
             session['username'] = keypair['username']
@@ -83,7 +133,8 @@ def home():
     print(f'Username of session: {username}')
     blog_results = Blog.get_all_user_blogs(username)
 
-    print(f"First user blog found: {blog_results[0]}")
+    if blog_results is not None:
+        print(f"First user blog found: {blog_results[0]}")
 
     # Creating local variables for tracking status
     user_search = False
