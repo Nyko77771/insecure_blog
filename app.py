@@ -52,12 +52,10 @@ csp = {"default-src": "'self'",
 hsts = {"max-age": 31536000, "includeSubDomains": True} # Max age for 1 year
 
 # Enforcing Security Headers
-talisman.force_https = True
-talisman.session_cookie_http_only = True
 talisman.session_cookie_secure = True
 talisman.x_xss_protection = True # X-XSS Protection
 # talisman.x_content_type_options = True #Prevent MIME attacks
-talisman.session_cookie_samesite = "Strict"
+talisman.session_cookie_samesite = "Lax"
 talisman.content_security_policy_nonce_in=["script-src"]
 
 # Adding headers to talisman
@@ -83,7 +81,7 @@ def index():
         # Using user authentication method to see if user exists
         result = User.authenticate(username, password)
 
-        if result:
+        if result is not None:
             print(f"Result: {result.create_key_pair()}")
             keypair =result.create_key_pair()
             # Creating key value pair for user object
@@ -99,8 +97,8 @@ def index():
             return redirect('home')
         else:
             flash("Username does not exist")
-            # Logging an attempt at login
-            log.log_unsuccessful_login("Loggin", "User Failed to Log in", session["username"])
+            # Logging an attempt at logins
+            log.log_unsuccessful_login("Loggin", "User Failed to Log in", username)
             return redirect('/')
     return render('login.html')
 
