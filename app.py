@@ -117,8 +117,14 @@ def create_blog():
             blog_date = user_blog.created_at.date
             result = user_blog.db_save()
             if result:
-                print('Created new blog')
-                return render('blog.html', blog = user_blog, blog_date = blog_date)
+                print(f'Created new blog {result}')
+                print(f"User Blog Created: {user_blog.id}")
+                blog = {}
+                blog['blog_id'] = user_blog.id
+                blog['title'] = user_blog.title
+                blog['content'] = user_blog.content
+
+                return render('blog.html', blog = blog, blog_date = blog_date, session = session)
             else:
                 flash("Unable to create the blog")
                 return redirect('create')
