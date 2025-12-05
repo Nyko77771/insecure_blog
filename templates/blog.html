@@ -72,7 +72,7 @@
     var name = user_params.get("welcome");
     console.log(name);
     if (name) {
-        document.getElementById('welcome').innerHTML = "<p class='welcome'> Welcome, " + name + ".</p>";
+        document.write(name)
     }
 </script>
 {% endblock %}
