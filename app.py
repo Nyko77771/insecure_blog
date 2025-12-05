@@ -77,7 +77,8 @@ def home():
     print(f'Username of session: {username}')
     blog_results = Blog.get_all_user_blogs(username)
 
-    print(f"First user blog found: {blog_results[0]}")
+    if blog_results is not None:
+        print(f"First user blog found: {blog_results[0]}")
 
     # Creating local variables for tracking status
     user_search = False
@@ -93,7 +94,6 @@ def home():
         search_made = True
         # Return searched blogs
         search_blogs = Blog.search(search_word)
-        print(f"Found blog by search: {search_blogs}")
 
         # Register that user searched if blogs were found
         if search_blogs:
@@ -136,6 +136,7 @@ def blog(blog_id):
         blog['title'] = returned_data[0][0]
         blog['content'] = returned_data[0][2]
         blog['username'] = returned_data[0][1]
+        blog["blog_id"] = blog_id
     except Exception as e:
         print("Error occured creating Blog Page")
         return render('home.html')
@@ -144,15 +145,13 @@ def blog(blog_id):
     return render('blog.html', blog = blog)
 
 #
-@app.route('/delete_blog', methods=['POST'])
-def delete_blog():
-    id = request.form.get('blog_id')
-    print(f"Blog ID: {id}")
-    result = Blog.delete(id)
+@app.route('/delete_blog/<int:blog_id>', methods=['POST'])
+def delete_blog(blog_id):
+    print(f"Blog ID: {blog_id}")
+    result = Blog.delete(blog_id)
     if result:
         print('Blog deleted')
-        return redirect('home')
-    return None
+    return redirect('/home')
 
 # TO-DO!!!
 # VULNERABILITY: User name is reflected in the URL

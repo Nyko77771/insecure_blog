@@ -32,7 +32,7 @@ class DatabaseConnection:
                 user = "root",
                 # VULNERABILITY: Sensitive Data Exposure.
                 password = "VeryLongANDB0r1nGAns1",
-                database = "blog_app"
+                database = "blog_app_vuln"
             )
             print("MySQL connection established")
         except Exception as e:

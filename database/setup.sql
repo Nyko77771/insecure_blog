@@ -1,7 +1,7 @@
 -- Database Creation for blog_app
 -- Create database
-CREATE DATABASE IF NOT EXISTS blog_app;
-USE blog_app;
+CREATE DATABASE IF NOT EXISTS blog_app_vuln;
+USE blog_app_vuln;
 -- Create tables
 -- Users table
 CREATE TABLE IF NOT EXISTS users (

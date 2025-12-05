@@ -160,16 +160,6 @@ class User:
     # VULNERABILITY: Plain password comparison
     def authenticate(username, password):
         try:
-            """
-            Secure version:
-            user = User.get_user_by_username(username)
-            print(f"returned user: {user}")
-            user_password = User.get_user_password(username)
-            print(f"Comparing {password} and {user_password}")
-            if user and user_password[0] == password:
-                print(f"User {username} is validated")
-                return User(user_id = user[0], username = user[1], email = user[2], password = user[3], role = user[4])
-            """
             # VULNERABILITY: Un-parameterized query
             db = DatabaseConnection()
             query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"

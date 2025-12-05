@@ -35,7 +35,7 @@ class Blog():
     def update(self):
         self.update_at = datetime.now()
         db = DatabaseConnection()
-        query = "UPDATE posts SET title = %s, content = %s, update_at = %s"
+        query = "UPDATE blogs SET title = %s, content = %s, update_at = %s"
         try:
             result = db.execute_update_query(query, (self.title, self.content, self.update_at,))
             if result:
@@ -48,14 +48,16 @@ class Blog():
 
     def delete(blog_id):
         db = DatabaseConnection()
-        query = "DELETE FROM posts WHERE id = %s"
+        query = "DELETE FROM blogs WHERE id = %s"
         try:
             result = db.execute_update_query(query, (blog_id,))
-            print(f"Blog Id {result['id']} deleted.")
+            if result == 0:
+                print("No Blog Deleted")
+            print(f"Blog {blog_id} deleted.")
             return True
         except Exception as e:
             # VULNERABILITY: Too much information is given.
-            print("An exception occured. Error: {e}")
+            print(f"An exception occured. Error: {e}")
             return False
 
     def get_all_user_blogs(username):
